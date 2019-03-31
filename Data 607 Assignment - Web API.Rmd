@@ -18,6 +18,18 @@ transform it to an R dataframe.
 # Load the libraries
 
 ```{r}
+library(DT)
+library(kableExtra)
+library(dplyr)
+library(RCurl)
+library(rjson)
+library(RJSONIO)
+library(jsonlite)
+
+library(httr)
+library(stringr)
+library(ggplot2)
+
 library(jsonlite)
 library(httr)
 ```
@@ -38,7 +50,7 @@ url <- paste0("https://api.nytimes.com/svc/books/v3//lists/current/hardcover-fic
 fictionbooks <- GET(url)
 ```
 
-Check response status
+#Check response status
 
 ```{r}
 fictionbooks$status_code
@@ -46,12 +58,22 @@ fictionbooks$status_code
 
 Convert to data frame 
 
+
 ```{r}
 fictiondf <- fromJSON(url, flatten = TRUE)
 fictiondf <- fictiondf$results
 fictiondf <- fictiondf$books
-fictiondf
+
+#datatable(fictiondf)
+
+jsonR <- tbl_df(as.data.frame(fictiondf))
+jsonR %>% kable() %>% 
+  kable_styling(bootstrap_options = "striped", font_size = 10) %>% 
+  scroll_box(height = "500px", width = "100%")
+
+
 ```
 
+## Conclusion 
 
-
+The New York Times Book Review API is a weekly paper-magazine supplement to The New York Times in which current non-fiction and fiction books are reviewed. It is one of the most influential and widely read book review publications in the industry that lets users to get book reviews displayed by ISBN,name of author and title
